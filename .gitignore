@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Credentials - NEVER commit these!
+.mcp.json
+*_credentials.json
+*.env
+.env
+
+# Runtime/cache files
+data/cve_enrichment_cache.json
+data/bod_26_04_report.json
+data/*.txt
+
+# Internal documentation - not for public repo
+SESSION_HANDOFF.md
+API_DOCUMENTATION.md
+
+# Output directories
+output/
+*.log
+
+# Test outputs
+/tmp/
+
+# Submission archive (generated, not tracked)
+*.tar.gz
+*.zip

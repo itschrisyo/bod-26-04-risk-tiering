@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "tenable": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://cloud.tenable.com/mcp/",
+        "--header",
+        "X-ApiKeys: accessKey=${TENABLE_ACCESS_KEY};secretKey=${TENABLE_SECRET_KEY}"
+      ]
+    }
+  }
+}

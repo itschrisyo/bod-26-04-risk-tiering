@@ -1,0 +1,34 @@
+{
+  "directive": "BOD 26-04",
+  "directive_title": "Prioritizing Security Updates Based on Risk",
+  "issued": "2026-06-10",
+  "source_url": "https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk",
+  "table_name": "Table 1: Remediation Timelines",
+  "transcribed_from": "Appendix A of the directive PDF, page 11",
+  "last_verified": "2026-07-15",
+  "reassessment_note": "CISA reassesses these timelines once per fiscal year (Directive, CISA Actions item 8). Re-verify this file against the current published Table 1 annually, and whenever CISA announces a Table 1 update.",
+  "notes": {
+    "days_are_calendar_days": true,
+    "forensic_triage_definition": "Remediation/mitigation within 3 days AND a forensic triage of the asset per CISA's Forensic Triage Guidance in the Implementation Guide.",
+    "fix_on_system_upgrade_definition": "Remediate at the next scheduled major upgrade or rebuild of the asset, unless Publicly Exposed / In KEV / Automatable change first.",
+    "dynamic_timelines": "Timelines are NOT static per finding. If any input variable changes (e.g. asset taken off the internet, or CVE newly added to KEV), the tier must be recomputed. Never cache a computed tier -- only cache CVE-level enrichment data (Automatable, Technical Impact), which does not change per organization."
+  },
+  "rows": [
+    {"row": 1,  "publicly_exposed": true,  "in_kev": true,  "automatable": true,  "technical_impact": "total",   "timeline": "3_days_forensic", "timeline_days": 3,  "forensic_triage_required": true},
+    {"row": 2,  "publicly_exposed": true,  "in_kev": true,  "automatable": true,  "technical_impact": "partial", "timeline": "3_days",          "timeline_days": 3,  "forensic_triage_required": false},
+    {"row": 3,  "publicly_exposed": true,  "in_kev": true,  "automatable": false, "technical_impact": "total",   "timeline": "3_days_forensic", "timeline_days": 3,  "forensic_triage_required": true},
+    {"row": 4,  "publicly_exposed": true,  "in_kev": true,  "automatable": false, "technical_impact": "partial", "timeline": "14_days",         "timeline_days": 14, "forensic_triage_required": false},
+    {"row": 5,  "publicly_exposed": true,  "in_kev": false, "automatable": true,  "technical_impact": "total",   "timeline": "3_days",          "timeline_days": 3,  "forensic_triage_required": false},
+    {"row": 6,  "publicly_exposed": true,  "in_kev": false, "automatable": true,  "technical_impact": "partial", "timeline": "14_days",         "timeline_days": 14, "forensic_triage_required": false},
+    {"row": 7,  "publicly_exposed": true,  "in_kev": false, "automatable": false, "technical_impact": "total",   "timeline": "14_days",         "timeline_days": 14, "forensic_triage_required": false},
+    {"row": 8,  "publicly_exposed": true,  "in_kev": false, "automatable": false, "technical_impact": "partial", "timeline": "60_days",         "timeline_days": 60, "forensic_triage_required": false},
+    {"row": 9,  "publicly_exposed": false, "in_kev": true,  "automatable": true,  "technical_impact": "total",   "timeline": "3_days_forensic", "timeline_days": 3,  "forensic_triage_required": true},
+    {"row": 10, "publicly_exposed": false, "in_kev": true,  "automatable": true,  "technical_impact": "partial", "timeline": "14_days",         "timeline_days": 14, "forensic_triage_required": false},
+    {"row": 11, "publicly_exposed": false, "in_kev": true,  "automatable": false, "technical_impact": "total",   "timeline": "14_days",         "timeline_days": 14, "forensic_triage_required": false},
+    {"row": 12, "publicly_exposed": false, "in_kev": true,  "automatable": false, "technical_impact": "partial", "timeline": "14_days",         "timeline_days": 14, "forensic_triage_required": false},
+    {"row": 13, "publicly_exposed": false, "in_kev": false, "automatable": true,  "technical_impact": "total",   "timeline": "60_days",         "timeline_days": 60, "forensic_triage_required": false},
+    {"row": 14, "publicly_exposed": false, "in_kev": false, "automatable": true,  "technical_impact": "partial", "timeline": "60_days",         "timeline_days": 60, "forensic_triage_required": false},
+    {"row": 15, "publicly_exposed": false, "in_kev": false, "automatable": false, "technical_impact": "total",   "timeline": "fix_on_upgrade",  "timeline_days": null, "forensic_triage_required": false},
+    {"row": 16, "publicly_exposed": false, "in_kev": false, "automatable": false, "technical_impact": "partial", "timeline": "fix_on_upgrade",  "timeline_days": null, "forensic_triage_required": false}
+  ]
+}

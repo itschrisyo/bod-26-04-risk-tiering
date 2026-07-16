@@ -1,0 +1,483 @@
+{
+  "data_source": "Tenable One (Exposure Management) - Findings API v3",
+  "endpoint": "POST /api/v3/inventory/findings/search",
+  "query_used": {
+    "query_text": "CVE-",
+    "severity": "CRITICAL",
+    "limit": 20
+  },
+  "field_structure": {
+    "description": "Based on the Tenable One inventory properties API, findings objects contain 44 possible fields. Below is the complete structure with field types and what each represents.",
+    "all_available_fields": [
+      {
+        "field_name": "finding_id",
+        "display_name": "Finding ID",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Unique identifier for the finding"
+      },
+      {
+        "field_name": "state",
+        "display_name": "State",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "possible_values": ["ACTIVE", "RESURFACED", "FIXED"],
+        "purpose": "Current state of the finding"
+      },
+      {
+        "field_name": "finding_name",
+        "display_name": "Finding Name",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Name/title of the finding (typically CVE ID for vulnerabilities)"
+      },
+      {
+        "field_name": "finding_description",
+        "display_name": "Description",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Detailed description of the vulnerability/finding"
+      },
+      {
+        "field_name": "finding_severity",
+        "display_name": "Severity",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "possible_values": ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"],
+        "purpose": "Severity level of the finding"
+      },
+      {
+        "field_name": "finding_cves",
+        "display_name": "CVEs",
+        "type": "ARRAY",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Array of CVE identifiers associated with this finding",
+        "note": "This is how CVE IDs are structured - as an array of strings"
+      },
+      {
+        "field_name": "first_observed_at",
+        "display_name": "First Seen (observed)",
+        "type": "DATE",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Timestamp when the finding was first detected",
+        "note": "Critical for BOD 26-04 age calculations"
+      },
+      {
+        "field_name": "last_observed_at",
+        "display_name": "Last Seen",
+        "type": "DATE",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Timestamp when the finding was last observed"
+      },
+      {
+        "field_name": "last_updated",
+        "display_name": "Last Updated",
+        "type": "DATE",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Timestamp when the finding record was last updated"
+      },
+      {
+        "field_name": "asset_id",
+        "display_name": "Asset ID",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": false,
+        "purpose": "Unique identifier of the asset containing this finding"
+      },
+      {
+        "field_name": "asset_name",
+        "display_name": "Asset Name",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": false,
+        "purpose": "Name/hostname of the asset"
+      },
+      {
+        "field_name": "asset_class",
+        "display_name": "Asset Class",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": false,
+        "purpose": "Classification type of the asset",
+        "note": "13 possible values available"
+      },
+      {
+        "field_name": "ipv4_addresses",
+        "display_name": "Asset IPv4 addresses",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": false,
+        "purpose": "IPv4 addresses associated with the asset"
+      },
+      {
+        "field_name": "ipv6_addresses",
+        "display_name": "Asset IPv6 addresses",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": false,
+        "purpose": "IPv6 addresses associated with the asset"
+      },
+      {
+        "field_name": "mac_addresses",
+        "display_name": "Asset Host MAC Address",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": false,
+        "purpose": "MAC addresses of the asset"
+      },
+      {
+        "field_name": "port",
+        "display_name": "Port",
+        "type": "NUMBER",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Network port where the finding was detected"
+      },
+      {
+        "field_name": "protocol",
+        "display_name": "Protocol",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Network protocol (TCP/UDP/etc.)"
+      },
+      {
+        "field_name": "finding_vpr_score",
+        "display_name": "VPR Score",
+        "type": "NUMBER",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Tenable's Vulnerability Priority Rating (0-10 scale)"
+      },
+      {
+        "field_name": "finding_vpr2_score",
+        "display_name": "VPR v2",
+        "type": "NUMBER",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "VPR version 2 score"
+      },
+      {
+        "field_name": "finding_cvss3_base_score",
+        "display_name": "CVSSv3 Base Score",
+        "type": "NUMBER",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "CVSS version 3 base score (0-10 scale)"
+      },
+      {
+        "field_name": "finding_solution",
+        "display_name": "Solution",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Remediation guidance for the finding"
+      },
+      {
+        "field_name": "finding_detection_id",
+        "display_name": "Detection ID",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "ID of the detection/plugin that identified this finding"
+      },
+      {
+        "field_name": "finding_attributes",
+        "display_name": "Finding Attributes",
+        "type": "OBJECT",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "Additional structured attributes about the finding"
+      },
+      {
+        "field_name": "custom_attributes",
+        "display_name": "Custom Attributes",
+        "type": "OBJECT",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "User-defined custom attributes"
+      },
+      {
+        "field_name": "tag_ids",
+        "display_name": "Asset Tag IDs",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "IDs of tags applied to the asset"
+      },
+      {
+        "field_name": "tag_names",
+        "display_name": "Asset Tag Names",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Names of tags applied to the asset"
+      },
+      {
+        "field_name": "product",
+        "display_name": "Source",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Tenable product that detected the finding",
+        "note": "17 possible values (e.g., Nessus, Web App Scanning, etc.)"
+      },
+      {
+        "field_name": "sensor_type",
+        "display_name": "Source (Legacy)",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Legacy sensor type identifier",
+        "note": "76 possible values"
+      },
+      {
+        "field_name": "detection_output",
+        "display_name": "Plugin Output",
+        "type": "STRING",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "Raw output from the detection plugin"
+      },
+      {
+        "field_name": "detected_file_paths",
+        "display_name": "Detected File Paths",
+        "type": "ARRAY",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "File paths where the issue was detected"
+      },
+      {
+        "field_name": "code_branch",
+        "display_name": "Code Branch",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Source code branch (for code scanning findings)"
+      },
+      {
+        "field_name": "file_path",
+        "display_name": "Code File Path",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "File path in source code"
+      },
+      {
+        "field_name": "code_line_number",
+        "display_name": "Code Line Number",
+        "type": "NUMBER",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Line number in source code where issue was found"
+      },
+      {
+        "field_name": "package_name",
+        "display_name": "Source Code Package Name",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Name of the vulnerable package"
+      },
+      {
+        "field_name": "package_version",
+        "display_name": "Source Code Package Version",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Version of the vulnerable package"
+      },
+      {
+        "field_name": "package_manager",
+        "display_name": "Source Code Package Manager",
+        "type": "STRING",
+        "sortable": true,
+        "filterable": true,
+        "purpose": "Package manager (npm, pip, maven, etc.)"
+      },
+      {
+        "field_name": "apa_total_steps_count",
+        "display_name": "Top Attack Techniques",
+        "type": "NUMBER",
+        "sortable": true,
+        "filterable": false,
+        "purpose": "Total count of attack techniques (Attack Path Analysis)"
+      },
+      {
+        "field_name": "apa_low_steps_count",
+        "display_name": "Number of Low Attack Techniques",
+        "type": "NUMBER",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "Count of low-severity attack techniques"
+      },
+      {
+        "field_name": "apa_medium_steps_count",
+        "display_name": "Number of Medium Attack Techniques",
+        "type": "NUMBER",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "Count of medium-severity attack techniques"
+      },
+      {
+        "field_name": "apa_high_steps_count",
+        "display_name": "Number of High Attack Techniques",
+        "type": "NUMBER",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "Count of high-severity attack techniques"
+      },
+      {
+        "field_name": "apa_critical_steps_count",
+        "display_name": "Number of Critical Attack Techniques",
+        "type": "NUMBER",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "Count of critical-severity attack techniques"
+      },
+      {
+        "field_name": "total_finding_count",
+        "display_name": "Active Finding Count",
+        "type": "NUMBER",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "Total active findings on the asset"
+      },
+      {
+        "field_name": "fixed_finding_count",
+        "display_name": "Fixed Finding Count",
+        "type": "NUMBER",
+        "sortable": false,
+        "filterable": false,
+        "purpose": "Count of fixed findings on the asset"
+      }
+    ]
+  },
+  "key_fields_for_bod_26_04": {
+    "cve_identification": {
+      "field": "finding_cves",
+      "type": "ARRAY of strings",
+      "example": "[\"CVE-2024-26581\", \"CVE-2024-12345\"]",
+      "note": "Array may contain multiple CVEs for a single finding"
+    },
+    "asset_information": {
+      "fields": {
+        "asset_id": {
+          "type": "STRING",
+          "example": "9e5b3022-9453-5e6e-879c-089ab31ae6ff",
+          "purpose": "Unique asset identifier for grouping findings"
+        },
+        "asset_name": {
+          "type": "STRING",
+          "example": "web-server-01.example.com",
+          "purpose": "Human-readable asset identifier"
+        },
+        "asset_class": {
+          "type": "STRING",
+          "example": "HOST",
+          "purpose": "Asset type classification"
+        }
+      }
+    },
+    "temporal_data": {
+      "first_observed_at": {
+        "type": "DATE (ISO 8601)",
+        "example": "2024-03-15T10:30:00Z",
+        "purpose": "Critical for calculating vulnerability age and BOD deadlines",
+        "calculation": "Days since first detection = today - first_observed_at"
+      },
+      "last_observed_at": {
+        "type": "DATE (ISO 8601)",
+        "example": "2024-07-10T14:22:00Z",
+        "purpose": "Confirms finding is still present"
+      }
+    }
+  },
+  "exposure_and_kev_fields": {
+    "available_in_findings_api": false,
+    "note": "The Tenable One Findings API does NOT include dedicated fields for:",
+    "missing_fields": [
+      "internet_facing",
+      "exposure_score",
+      "kev_status",
+      "epss_score",
+      "cisa_kev_flag"
+    ],
+    "alternative_approach": {
+      "method": "Must use Tenable One Assets API or integrate with external KEV catalog",
+      "steps": [
+        "1. Query findings to get CVE IDs from finding_cves field",
+        "2. Query assets using asset_id to check for exposure indicators",
+        "3. Cross-reference CVE IDs with CISA KEV catalog (external API/data)",
+        "4. Use asset tags or attributes to identify internet-facing assets"
+      ],
+      "asset_api_fields": [
+        "Asset exposure_score",
+        "Asset network_access_scope",
+        "Asset tags (can indicate 'Internet-Facing')"
+      ]
+    }
+  },
+  "example_finding_object": {
+    "note": "This is a constructed example based on the field structure. Actual API responses will contain these fields.",
+    "finding_id": "008cb2a4-a4e7-5612-9e24-19a56e925812",
+    "finding_name": "CVE-2024-26581",
+    "finding_description": "Linux Kernel vulnerability allowing local privilege escalation",
+    "finding_severity": "CRITICAL",
+    "finding_cves": [
+      "CVE-2024-26581"
+    ],
+    "finding_cvss3_base_score": 9.8,
+    "finding_vpr_score": 9.5,
+    "state": "ACTIVE",
+    "first_observed_at": "2024-03-15T10:30:00Z",
+    "last_observed_at": "2024-07-14T08:15:00Z",
+    "last_updated": "2024-07-14T09:00:00Z",
+    "asset_id": "9e5b3022-9453-5e6e-879c-089ab31ae6ff",
+    "asset_name": "prod-web-01.internal.example.com",
+    "asset_class": "HOST",
+    "ipv4_addresses": "192.168.1.100",
+    "ipv6_addresses": null,
+    "mac_addresses": "00:0c:29:12:34:56",
+    "port": 443,
+    "protocol": "TCP",
+    "finding_solution": "Update to kernel version 6.1.82 or later",
+    "finding_detection_id": "12345",
+    "product": "Nessus",
+    "tag_names": "Production,Web-Server",
+    "tag_ids": "tag-001,tag-002",
+    "apa_critical_steps_count": 3,
+    "total_finding_count": 45,
+    "detection_output": "Kernel version 5.15.0-91 detected...",
+    "finding_attributes": {},
+    "custom_attributes": {}
+  },
+  "api_response_structure": {
+    "top_level_fields": {
+      "items": "Array of finding objects (each with the fields above)",
+      "total": "Total number of findings matching the query",
+      "offset": "Pagination offset",
+      "limit": "Maximum results returned per page"
+    }
+  },
+  "summary": {
+    "total_fields": 44,
+    "key_findings": [
+      "CVE IDs are in the 'finding_cves' field as an ARRAY of strings",
+      "Asset information is available via asset_id, asset_name, and asset_class",
+      "First detection date is in 'first_observed_at' field (ISO 8601 date)",
+      "NO direct exposure/internet-facing fields in findings API",
+      "NO KEV-related fields in findings API - must cross-reference externally",
+      "Exposure data requires separate Assets API query using asset_id"
+    ]
+  }
+}

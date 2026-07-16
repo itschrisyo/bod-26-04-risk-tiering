@@ -1,0 +1,257 @@
+{
+  "document_title": "Tenable Workbench API Data Structure for BOD 26-04",
+  "date_generated": "2026-07-15",
+  "purpose": "Document where KEV dates and ACR scores are located in Tenable API responses",
+
+  "summary": {
+    "kev_date_location": "Plugin attributes via /plugins/plugin/{plugin_id} endpoint",
+    "kev_attribute_name": "cisa-known-exploited",
+    "kev_format": "YYYY/MM/DD",
+    "acr_location": "Asset data via /assets endpoint",
+    "acr_field_name": "acr_score",
+    "public_exposure_indicator": "exposure_score field available on assets"
+  },
+
+  "key_findings": {
+    "kev_data": {
+      "attribute_name": "cisa-known-exploited",
+      "api_endpoint": "/plugins/plugin/{plugin_id}",
+      "example_plugin_id": 185887,
+      "example_value": "2025/02/25",
+      "notes": [
+        "Only present on plugins that are on CISA KEV list",
+        "Date format is YYYY/MM/DD",
+        "Must fetch plugin details, not just vulnerability info",
+        "NOT available in /workbenches/vulnerabilities/{plugin_id}/info endpoint",
+        "IS available in /plugins/plugin/{plugin_id} endpoint under attributes array"
+      ]
+    },
+    "acr_data": {
+      "field_name": "acr_score",
+      "api_endpoint": "/assets",
+      "example_asset_id": "0008c1bb-f26b-4d04-8b2c-59eda38fd79e",
+      "example_value": 2,
+      "scale": "Integer score",
+      "additional_fields": {
+        "acr_score_v3": "Same value in detailed asset info",
+        "acr_drivers": "Array of driver objects explaining score calculation",
+        "exposure_score": "Separate metric for public exposure (integer)",
+        "exposure_confidence_value": "Confidence in exposure assessment"
+      },
+      "notes": [
+        "Available directly on asset objects from /assets endpoint",
+        "Also available in /workbenches/assets/{asset_id}/info",
+        "acr_drivers provides reasoning for score",
+        "exposure_score indicates internet/public exposure level"
+      ]
+    }
+  },
+
+  "api_endpoints": {
+    "list_assets": {
+      "endpoint": "/assets",
+      "method": "GET",
+      "returns": "List of assets with acr_score, exposure_score, and other metadata",
+      "fields_of_interest": [
+        "id",
+        "acr_score",
+        "acr_drivers",
+        "exposure_score",
+        "exposure_confidence_value",
+        "ipv4",
+        "fqdn",
+        "operating_system",
+        "last_seen"
+      ]
+    },
+    "get_asset_detail": {
+      "endpoint": "/workbenches/assets/{asset_id}/info",
+      "method": "GET",
+      "returns": "Detailed asset information including acr_score_v3"
+    },
+    "list_vulnerabilities": {
+      "endpoint": "/workbenches/vulnerabilities",
+      "method": "GET",
+      "parameters": {
+        "filter.0.filter": "severity",
+        "filter.0.quality": "eq",
+        "filter.0.value": "Critical"
+      },
+      "returns": "List of vulnerability plugins with counts",
+      "fields_of_interest": [
+        "plugin_id",
+        "plugin_name",
+        "count",
+        "severity",
+        "vpr_score",
+        "cvss3_base_score"
+      ],
+      "notes": [
+        "Does NOT include KEV date",
+        "Must call /plugins/plugin/{plugin_id} for KEV data"
+      ]
+    },
+    "get_plugin_details": {
+      "endpoint": "/plugins/plugin/{plugin_id}",
+      "method": "GET",
+      "returns": "Plugin attributes including cisa-known-exploited if applicable",
+      "kev_attribute": "cisa-known-exploited",
+      "other_exploit_attributes": [
+        "exploit_available",
+        "exploitability_ease",
+        "exploited_by_malware"
+      ]
+    },
+    "get_vulnerability_info": {
+      "endpoint": "/workbenches/vulnerabilities/{plugin_id}/info",
+      "method": "GET",
+      "returns": "Workbench vulnerability details",
+      "notes": [
+        "Does NOT include cisa-known-exploited attribute",
+        "Includes exploit_available but not KEV date",
+        "Use /plugins/plugin/{plugin_id} instead for KEV data"
+      ]
+    },
+    "list_assets_with_vulnerabilities": {
+      "endpoint": "/workbenches/assets",
+      "method": "GET",
+      "parameters": {
+        "filter.0.filter": "severity",
+        "filter.0.quality": "eq",
+        "filter.0.value": "Critical"
+      },
+      "returns": "Assets filtered by vulnerability criteria"
+    },
+    "get_asset_vulnerabilities": {
+      "endpoint": "/workbenches/assets/{asset_id}/vulnerabilities",
+      "method": "GET",
+      "returns": "All vulnerabilities for a specific asset"
+    }
+  },
+
+  "example_workflows": {
+    "get_bod_26_04_data": {
+      "description": "Retrieve BOD 26-04 relevant data: Critical vulnerabilities with KEV dates on assets with ACR scores",
+      "steps": [
+        {
+          "step": 1,
+          "action": "GET /workbenches/vulnerabilities",
+          "parameters": "filter by severity=Critical",
+          "extract": ["plugin_id", "plugin_name", "count", "vpr_score"]
+        },
+        {
+          "step": 2,
+          "action": "For each plugin_id, GET /plugins/plugin/{plugin_id}",
+          "extract": ["cisa-known-exploited attribute from attributes array"],
+          "filter": "Only keep plugins where cisa-known-exploited exists"
+        },
+        {
+          "step": 3,
+          "action": "GET /assets",
+          "extract": ["id", "acr_score", "exposure_score", "ipv4", "fqdn", "operating_system"],
+          "notes": "All assets with their ACR scores"
+        },
+        {
+          "step": 4,
+          "action": "For each asset, GET /workbenches/assets/{asset_id}/vulnerabilities",
+          "match": "Cross-reference asset vulnerabilities with KEV plugin list from step 2"
+        },
+        {
+          "step": 5,
+          "action": "Output combined data",
+          "format": {
+            "asset_id": "string",
+            "asset_ipv4": "string",
+            "asset_fqdn": "string",
+            "acr_score": "integer",
+            "exposure_score": "integer",
+            "vulnerabilities": [
+              {
+                "plugin_id": "integer",
+                "plugin_name": "string",
+                "cisa_kev_date": "YYYY/MM/DD",
+                "cvss3_score": "float",
+                "first_detected": "timestamp",
+                "last_detected": "timestamp"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  "example_data_structures": {
+    "plugin_with_kev": {
+      "plugin_id": 185887,
+      "name": "Security Updates for Microsoft .NET Framework (November 2023)",
+      "family_name": "Windows : Microsoft Bulletins",
+      "attributes": [
+        {
+          "attribute_name": "cisa-known-exploited",
+          "attribute_value": "2025/02/25"
+        },
+        {
+          "attribute_name": "exploit_available",
+          "attribute_value": "true"
+        },
+        {
+          "attribute_name": "exploitability_ease",
+          "attribute_value": "Exploits are available"
+        },
+        {
+          "attribute_name": "cve",
+          "attribute_value": "CVE-2023-XXXXX"
+        }
+      ]
+    },
+    "asset_with_acr": {
+      "id": "0008c1bb-f26b-4d04-8b2c-59eda38fd79e",
+      "has_agent": false,
+      "last_seen": "2026-07-15T18:46:04.939Z",
+      "acr_score": 2,
+      "acr_drivers": [
+        {
+          "driver_name": "gap_acr_rule_key",
+          "driver_value": [81]
+        },
+        {
+          "driver_name": "gap_confidence",
+          "driver_value": [60]
+        },
+        {
+          "driver_name": "gap_device_class_code",
+          "driver_value": ["VM_WORKLOAD"]
+        },
+        {
+          "driver_name": "gap_device_sub_class",
+          "driver_value": ["VIRTUAL_MACHINE"]
+        }
+      ],
+      "exposure_score": 437,
+      "ipv4": ["192.168.48.34"],
+      "fqdn": ["ol9.dc.demo.io"],
+      "operating_system": ["Linux Kernel 5.15.0-4.70.5.2.el9uek.x86_64 on Oracle Linux Server release 9.1"]
+    }
+  },
+
+  "important_notes": [
+    "KEV date is ONLY in /plugins/plugin/{plugin_id} endpoint, NOT in /workbenches/vulnerabilities/{plugin_id}/info",
+    "The attribute name is 'cisa-known-exploited' with hyphens, not underscores",
+    "KEV attribute only exists on plugins that are on CISA's Known Exploited Vulnerabilities list",
+    "ACR score is readily available on all assets from the /assets endpoint",
+    "exposure_score indicates public/internet exposure level",
+    "Must join vulnerability data with plugin KEV data and asset ACR data to get complete BOD 26-04 picture",
+    "The MCP tools return formatted text, not raw JSON, so direct API calls are needed for full data access"
+  ],
+
+  "filter_recommendations": {
+    "bod_26_04_criteria": {
+      "severity": "Critical or High",
+      "kev_status": "cisa-known-exploited attribute must be present",
+      "acr_consideration": "Higher ACR scores indicate more critical assets",
+      "exposure_consideration": "Higher exposure_score indicates public-facing assets",
+      "prioritization": "Order by: KEV date (older = higher priority), ACR score (higher = more critical), exposure score (higher = more exposed)"
+    }
+  }
+}

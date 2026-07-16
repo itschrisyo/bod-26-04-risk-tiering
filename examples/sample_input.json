@@ -1,0 +1,34 @@
+{
+  "findings": [
+    {
+      "asset_id": "asset-001",
+      "asset_name": "web-prod-03.example.internal",
+      "cve_id": "CVE-2024-25522",
+      "plugin_id": "199001",
+      "plugin_name": "Example Web Server RCE",
+      "publicly_exposed": true,
+      "first_detected_date": "2026-06-20",
+      "in_kev_per_tenable": false
+    },
+    {
+      "asset_id": "asset-002",
+      "asset_name": "db-internal-07.example.internal",
+      "cve_id": "CVE-2024-25522",
+      "plugin_id": "199001",
+      "plugin_name": "Example Web Server RCE",
+      "publicly_exposed": false,
+      "first_detected_date": "2026-07-01",
+      "in_kev_per_tenable": false
+    },
+    {
+      "asset_id": "asset-003",
+      "asset_name": "legacy-app-01.example.internal",
+      "cve_id": "CVE-2099-00001",
+      "plugin_id": "200500",
+      "plugin_name": "Hypothetical Undisclosed CVE",
+      "publicly_exposed": true,
+      "first_detected_date": "2026-05-15",
+      "in_kev_per_tenable": false
+    }
+  ]
+}
