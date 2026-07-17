@@ -4,11 +4,19 @@ Simple test to verify KEV attribute access.
 """
 
 import json
+import os
 import requests
 
-ACCESS_KEY = "***REMOVED***"
-SECRET_KEY = "***REMOVED***"
+# Get credentials from environment variables - NEVER hardcode API keys
+ACCESS_KEY = os.environ.get("TENABLE_ACCESS_KEY")
+SECRET_KEY = os.environ.get("TENABLE_SECRET_KEY")
 BASE_URL = "https://cloud.tenable.com"
+
+if not ACCESS_KEY or not SECRET_KEY:
+    raise ValueError(
+        "Missing Tenable API credentials. Set TENABLE_ACCESS_KEY and TENABLE_SECRET_KEY environment variables.\n"
+        "Get your keys from: Tenable > Settings > My Account > API Keys"
+    )
 
 HEADERS = {
     "X-ApiKeys": f"accessKey={ACCESS_KEY};secretKey={SECRET_KEY}",
